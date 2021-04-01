@@ -34,6 +34,8 @@ import com.jy.login.interfaces.shop.IShop;
 import com.jy.login.loginActivity;
 import com.jy.login.model.bean.BannerBean;
 import com.jy.login.model.bean.GoodsBean;
+import com.jy.login.model.bean.HongBean;
+import com.jy.login.model.bean.ShopBean;
 import com.jy.login.model.bean.TabBean;
 import com.jy.login.persenter.ShopPersenter;
 import com.jy.login.ui.adapter.GoodsAdapter;
@@ -182,6 +184,16 @@ public class VideoFragment extends BaseFragment<ShopPersenter> implements IShop.
         for (int i = 0; i < list.size(); i++) {
             tablayout.getTabAt(i).setText(list.get(i).getName());
         }
+    }
+
+    @Override
+    public void getshop(ShopBean shopBean) {
+
+    }
+
+    @Override
+    public void gethong(HongBean hongBean) {
+
     }
 
     private void initGoods(List<GoodsBean.DataBean.YRinitlistBean._$10Bean.ContentBean.GoodslistBean> list) {

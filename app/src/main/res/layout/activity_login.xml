@@ -50,6 +50,7 @@
             app:tabBackground="@drawable/selector"
             android:background="@drawable/shape1"
             app:tabIndicatorHeight="0dp"
+            app:tabRippleColor = "@android:color/transparent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

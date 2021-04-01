@@ -6,6 +6,8 @@ import com.jy.login.interfaces.IBaseView;
 import com.jy.login.interfaces.IModel;
 import com.jy.login.model.bean.BannerBean;
 import com.jy.login.model.bean.GoodsBean;
+import com.jy.login.model.bean.HongBean;
+import com.jy.login.model.bean.ShopBean;
 import com.jy.login.model.bean.TabBean;
 
 public interface IShop {
@@ -14,6 +16,8 @@ public interface IShop {
         void getbanner(BannerBean bannerBean);
         void getgoods(GoodsBean goodsBean);
         void gettab(TabBean tabBean);
+        void getshop(ShopBean shopBean);
+        void gethong(HongBean hongBean);
     }
 
     interface Persenter extends IBasePresenter<View> {
@@ -21,6 +25,8 @@ public interface IShop {
         void getbanner();
         void getgoods();
         void gettab();
+        void getshop(String id);
+        void gethong(String id);
     }
 
     interface Model extends IModel {
@@ -28,5 +34,7 @@ public interface IShop {
         void getbanner(CallBack callBack);
         void getgoods(CallBack callBack);
         void gettab(CallBack callBack);
+        void getshop(CallBack callBack,String id);
+        void gethong(CallBack callBack,String id);
     }
 }

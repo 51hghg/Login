@@ -22,13 +22,17 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 import com.jy.login.R;
+import com.jy.login.base.BaseAdapter;
 import com.jy.login.base.BaseFragment;
 import com.jy.login.interfaces.shop.IShop;
 import com.jy.login.loginActivity;
 import com.jy.login.model.bean.BannerBean;
 import com.jy.login.model.bean.GoodsBean;
+import com.jy.login.model.bean.HongBean;
+import com.jy.login.model.bean.ShopBean;
 import com.jy.login.model.bean.TabBean;
 import com.jy.login.persenter.ShopPersenter;
+import com.jy.login.ui.activity.ShopActivity;
 import com.jy.login.ui.adapter.GoodsAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
@@ -66,6 +70,15 @@ public class ShopFragment extends BaseFragment<ShopPersenter> implements IShop.V
         recygoods.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         goodsAdapter = new GoodsAdapter(goodslist, getActivity());
         recygoods.setAdapter(goodsAdapter);
+
+        goodsAdapter.setOnItemClickListener(new GoodsAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int pos) {
+                Intent intent = new Intent(getActivity(), ShopActivity.class);
+                intent.putExtra("id",goodslist.get(pos).getId());
+                getActivity().startActivity(intent);
+            }
+        });
 
         btMainLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +144,16 @@ public class ShopFragment extends BaseFragment<ShopPersenter> implements IShop.V
         for (int i = 0; i < list.size(); i++) {
             tablayout.getTabAt(i).setText(list.get(i).getName());
         }
+    }
+
+    @Override
+    public void getshop(ShopBean shopBean) {
+
+    }
+
+    @Override
+    public void gethong(HongBean hongBean) {
+
     }
 
     private void initGoods(List<GoodsBean.DataBean.YRinitlistBean._$10Bean.ContentBean.GoodslistBean> list) {

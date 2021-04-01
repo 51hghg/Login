@@ -5,6 +5,8 @@ import com.jy.login.interfaces.CallBack;
 import com.jy.login.interfaces.shop.IShop;
 import com.jy.login.model.bean.BannerBean;
 import com.jy.login.model.bean.GoodsBean;
+import com.jy.login.model.bean.HongBean;
+import com.jy.login.model.bean.ShopBean;
 import com.jy.login.model.bean.TabBean;
 import com.jy.login.net.CommonSubscriber;
 import com.jy.login.net.HttpManager;
@@ -48,6 +50,34 @@ public class ShopModel extends BaseModel implements IShop.Model {
                             @Override
                             public void onNext(TabBean tabBean) {
                                 callBack.onSuccess(tabBean);
+                            }
+                        })
+        );
+    }
+
+    @Override
+    public void getshop(CallBack callBack, String id) {
+        addDisposable(
+                HttpManager.getHttpManager().getShopApi().getshop(id)
+                        .compose(RxUtils.rxScheduler())
+                        .subscribeWith(new CommonSubscriber<ShopBean>(callBack) {
+                            @Override
+                            public void onNext(ShopBean shopBean) {
+                                callBack.onSuccess(shopBean);
+                            }
+                        })
+        );
+    }
+
+    @Override
+    public void gethong(CallBack callBack, String id) {
+        addDisposable(
+                HttpManager.getHttpManager().getShopApi().gethong(id)
+                        .compose(RxUtils.rxScheduler())
+                        .subscribeWith(new CommonSubscriber<HongBean>(callBack) {
+                            @Override
+                            public void onNext(HongBean hongBean) {
+                                callBack.onSuccess(hongBean);
                             }
                         })
         );
