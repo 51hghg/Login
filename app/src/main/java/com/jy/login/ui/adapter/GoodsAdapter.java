@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jy.login.R;
 import com.jy.login.base.BaseAdapter;
-import com.jy.login.model.bean.GoodsBean;
+import com.jy.login.model.bean.GoodBean;
 
 import java.util.List;
 
@@ -28,15 +28,19 @@ public class GoodsAdapter extends BaseAdapter {
 
     @Override
     protected void bindData(Object data, VH vh) {
-        GoodsBean.DataBean.YRinitlistBean._$10Bean.ContentBean.GoodslistBean bean = (GoodsBean.DataBean.YRinitlistBean._$10Bean.ContentBean.GoodslistBean) data;
+        GoodBean.DataBean.GoodsListBean bean = (GoodBean.DataBean.GoodsListBean) data;
 
         ImageView img = (ImageView) vh.getViewByid(R.id.img);
         TextView tvTitle = (TextView) vh.getViewByid(R.id.tv_title);
         TextView tvMoney = (TextView) vh.getViewByid(R.id.tv_money);
+        TextView tvPing = (TextView) vh.getViewByid(R.id.text_ping);
+        TextView tvGood = (TextView) vh.getViewByid(R.id.text_good);
 
         Glide.with(context).load(bean.getImg()).into(img);
-        tvTitle.setText(bean.getTitle());
-        tvMoney.setText(bean.getPrice());
+        tvTitle.setText(bean.getName());
+        tvMoney.setText(bean.getSprice());
+        tvGood.setText(bean.getCommnet_count()+"万+评论");
+        tvGood.setText("%"+bean.getGood_score()+"好评");
 
         vh.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

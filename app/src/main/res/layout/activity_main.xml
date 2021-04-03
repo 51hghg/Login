@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#FFFFFF"
+    android:background="#F3EFEF"
+    android:overScrollMode="never"
+    android:layout_marginTop="@dimen/sp_20"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
@@ -11,12 +13,15 @@
         android:id="@+id/viewpager"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
+        android:overScrollMode="never"
+        android:background="#E8E0E0"
         app:layout_constraintBottom_toTopOf="@id/tablayout"
         android:layout_height="@dimen/dp_0"/>
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
         app:tabIndicatorHeight="0dp"
+        android:background="#ffffff"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

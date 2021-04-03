@@ -24,10 +24,12 @@ import com.jy.login.base.BaseFragment;
 import com.jy.login.interfaces.shop.IShop;
 import com.jy.login.loginActivity;
 import com.jy.login.model.bean.BannerBean;
+import com.jy.login.model.bean.GoodBean;
 import com.jy.login.model.bean.GoodsBean;
 import com.jy.login.model.bean.HongBean;
 import com.jy.login.model.bean.ShopBean;
 import com.jy.login.model.bean.TabBean;
+import com.jy.login.model.bean.TabDetailBean;
 import com.jy.login.persenter.ShopPersenter;
 import com.jy.login.ui.adapter.GoodsAdapter;
 import com.youth.banner.Banner;
@@ -149,11 +151,17 @@ public class GoFragment extends BaseFragment<ShopPersenter> implements IShop.Vie
     }
 
     @Override
+    public void getgood(GoodBean goodBean) {
+
+    }
+
+    @Override
     public void gettab(TabBean tabBean) {
         List<TabBean.DataBean.DrageListBean> list = tabBean.getData().getDrage_list();
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            SubFragment subFragment = new SubFragment();
+            final String id = list.get(i).getId();
+            SubFragment subFragment = new SubFragment(id);
             fragments.add(subFragment);
         }
 
@@ -184,6 +192,11 @@ public class GoFragment extends BaseFragment<ShopPersenter> implements IShop.Vie
 
     @Override
     public void gethong(HongBean hongBean) {
+
+    }
+
+    @Override
+    public void getTabDetaile(TabDetailBean tabDetailBean) {
 
     }
 

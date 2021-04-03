@@ -1,66 +1,93 @@
 package com.jy.login.ui.fragment;
 
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.jy.login.R;
+import com.jy.login.base.BaseFragment;
+import com.jy.login.interfaces.shop.IShop;
+import com.jy.login.model.bean.BannerBean;
+import com.jy.login.model.bean.GoodBean;
+import com.jy.login.model.bean.GoodsBean;
+import com.jy.login.model.bean.HongBean;
+import com.jy.login.model.bean.ShopBean;
+import com.jy.login.model.bean.TabBean;
+import com.jy.login.model.bean.TabDetailBean;
+import com.jy.login.persenter.ShopPersenter;
+import com.jy.login.ui.adapter.GoodsChildAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SubFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SubFragment extends Fragment {
+import java.util.ArrayList;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import butterknife.BindView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class SubFragment extends BaseFragment<ShopPersenter> implements IShop.View {
+    @BindView(R.id.recycler)
+    RecyclerView recycler;
+    private String id="23";
+    private ArrayList<TabDetailBean.DataBean.YRinitlistBean.ContentBean.NavListBean> goodslist;
+    private GoodsChildAdapter goodsChildAdapter;
 
-    public SubFragment() {
-        // Required empty public constructor
+    public SubFragment(String id) {
+        this.id = id;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SubFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SubFragment newInstance(String param1, String param2) {
-        SubFragment fragment = new SubFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+    @Override
+    public int getLatout() {
+        return R.layout.fragment_sub;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void initView() {
+        goodslist = new ArrayList<>();
+        recycler.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+        goodsChildAdapter = new GoodsChildAdapter(goodslist, getActivity());
+        recycler.setAdapter(goodsChildAdapter);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sub, container, false);
+    public ShopPersenter createPresenter() {
+        return new ShopPersenter(this);
+    }
+
+    @Override
+    public void initData() {
+        presenter.getTabDetaile(id);
+    }
+
+    @Override
+    public void getbanner(BannerBean bannerBean) {
+
+    }
+
+    @Override
+    public void getgoods(GoodsBean goodsBean) {
+
+    }
+
+    @Override
+    public void getgood(GoodBean goodBean) {
+
+    }
+
+    @Override
+    public void gettab(TabBean tabBean) {
+
+    }
+
+    @Override
+    public void getshop(ShopBean shopBean) {
+
+    }
+
+    @Override
+    public void gethong(HongBean hongBean) {
+
+    }
+
+    @Override
+    public void getTabDetaile(TabDetailBean tabDetailBean) {
+        goodslist.addAll(tabDetailBean.getData().getYRinitlist().get(0).getContent().getNav_list());
+        goodsChildAdapter.notifyDataSetChanged();
     }
 }

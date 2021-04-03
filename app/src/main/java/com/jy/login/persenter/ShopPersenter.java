@@ -5,10 +5,12 @@ import com.jy.login.interfaces.CallBack;
 import com.jy.login.interfaces.shop.IShop;
 import com.jy.login.model.ShopModel;
 import com.jy.login.model.bean.BannerBean;
+import com.jy.login.model.bean.GoodBean;
 import com.jy.login.model.bean.GoodsBean;
 import com.jy.login.model.bean.HongBean;
 import com.jy.login.model.bean.ShopBean;
 import com.jy.login.model.bean.TabBean;
+import com.jy.login.model.bean.TabDetailBean;
 
 public class ShopPersenter extends BasePresenter<IShop.View> implements IShop.Persenter {
 
@@ -53,6 +55,25 @@ public class ShopPersenter extends BasePresenter<IShop.View> implements IShop.Pe
             public void onSuccess(Object o) {
                 if (view != null) {
                     view.getgoods((GoodsBean) o);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getgood() {
+        model.getgood(new CallBack() {
+            @Override
+            public void onFaile(String msg) {
+                if (view != null) {
+                    view.tips(msg);
+                }
+            }
+
+            @Override
+            public void onSuccess(Object o) {
+                if (view != null) {
+                    view.getgood((GoodBean) o);
                 }
             }
         });
@@ -113,5 +134,24 @@ public class ShopPersenter extends BasePresenter<IShop.View> implements IShop.Pe
                 }
             }
         },id);
+    }
+
+    @Override
+    public void getTabDetaile(String  id) {
+        model.getTabDetaile(id, new CallBack() {
+            @Override
+            public void onFaile(String msg) {
+                if (view!=null){
+                    view.tips(msg);
+                }
+            }
+
+            @Override
+            public void onSuccess(Object o) {
+                if (view != null) {
+                    view.getTabDetaile((TabDetailBean) o);
+                }
+            }
+        });
     }
 }

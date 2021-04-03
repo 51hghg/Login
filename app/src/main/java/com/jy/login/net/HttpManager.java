@@ -74,7 +74,7 @@ public class HttpManager {
         @Override
         public Response intercept(Chain chain) throws IOException {
             final Request build = chain.request().newBuilder()
-//                    .addHeader("Authorization", "APPCODE 964e16aa1ae944e9828e87b8b9fbd30a")
+                    .addHeader("Authorization", "APPCODE 964e16aa1ae944e9828e87b8b9fbd30a")
 //                    .addHeader("X-Nideshop-Token", SpUtils.getInstance().getString("token"))
                     .build();
             return chain.proceed(build);

@@ -23,20 +23,20 @@
 
             <ImageView
                 android:id="@+id/tv_loginactivity_username"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="55dp"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginLeft="@dimen/dp_40"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/shoujihao" />
 
             <EditText
                 android:id="@+id/phone_number"
-                android:layout_width="270dp"
+                android:layout_width="@dimen/dp_250"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:hint="请输入您的手机号"
                 android:paddingBottom="20dp"
-                android:textSize="20sp" />
+                android:textSize="@dimen/dp_16" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,21 +47,21 @@
 
             <ImageView
                 android:id="@+id/tv_loginactivity_password"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="55dp"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginLeft="@dimen/dp_40"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/yanzhengma" />
 
             <EditText
                 android:id="@+id/verification_code"
-                android:layout_width="170dp"
+                android:layout_width="@dimen/dp_140"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:hint="请输入验证码"
                 android:inputType="textPassword"
                 android:paddingBottom="20dp"
-                android:textSize="20sp" />
+                android:textSize="@dimen/sp_16" />
 
             <Button
                 android:id="@+id/button_send_verification_code"
@@ -70,14 +70,14 @@
                 android:background="@drawable/selector2"
                 android:text="获取验证码"
                 android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:textSize="@dimen/sp_16" />
         </LinearLayout>
     </LinearLayout>
 
     <Button
         android:id="@+id/button_login"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_300"
+        android:layout_height="@dimen/dp_50"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="25dp"
         android:layout_marginRight="5dp"
@@ -135,19 +135,19 @@
         app:layout_constraintTop_toBottomOf="@id/tv_loginactivity_register" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="25dp"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginLeft="@dimen/dp_100"
+        android:layout_marginTop="@dimen/sp_20"
         android:src="@drawable/qq1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_loginactivity_else" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginRight="120dp"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/sp_20"
+        android:layout_marginRight="@dimen/dp_100"
         android:src="@drawable/weixin1"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_loginactivity_else" />
@@ -155,7 +155,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="30dp"
         android:text="无法登录？联系我们"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
