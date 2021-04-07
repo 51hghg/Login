@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +18,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.jy.login.MainActivity;
 import com.jy.login.R;
 import com.jy.login.base.BaseActivity;
 import com.jy.login.interfaces.shop.IShop;
@@ -37,11 +38,10 @@ import com.jy.login.model.bean.TabDetailBean;
 import com.jy.login.persenter.ShopPersenter;
 import com.jy.login.ui.adapter.BigAdapter;
 import com.jy.login.ui.adapter.HongAdapter;
+import com.jy.login.utils.LoadingDailog;
 import com.jy.login.widget.NumberSelect;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +58,7 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
     Banner banner;
     @BindView(R.id.recy_hong)
     RecyclerView recyHong;
+    private LoadingDailog.Builder builder;
     //是否使用特殊的标题栏背景颜色，android5.0以上可以设置状态栏背景色，如果不使用则使用透明色值
     protected boolean useThemestatusBarColor = false;
     //是否使用状态栏文字和图标为暗色，如果状态栏采用了白色系，则需要使状态栏和图标为暗色，android6.0以上可以设置
@@ -67,6 +68,18 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
     @BindView(R.id.con_main)
     ConstraintLayout conMain;
     int numberBuy = 0;
+    @BindView(R.id.img_fan)
+    ImageView imgFan;
+    @BindView(R.id.address)
+    LinearLayout address;
+    @BindView(R.id.text_address)
+    TextView textAddress;
+    @BindView(R.id.fan_shou)
+    LinearLayout fanShou;
+    @BindView(R.id.add_car)
+    LinearLayout addCar;
+    @BindView(R.id.fenxiang)
+    LinearLayout fenxiang;
     private String h5 = "<html>\n" +
             "            <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\"/>\n" +
             "            <head>\n" +
@@ -90,6 +103,8 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
     private ArrayList<HongBean.GoodsInfoBean> goodslist;
     private HongAdapter hongAdapter;
     private Button btn_shop;
+    private String address1;
+    private LoadingDailog loadingDailog;
 
     protected void setStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
@@ -117,19 +132,42 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
 
     @Override
     protected int getLayout() {
+        builder = new LoadingDailog.Builder(this)
+                .setMessage("加载中...")
+                .setCancelable(true)
+                .setCancelOutside(true);
+
         setStatusBar();
+
         return R.layout.activity_shop;
 
     }
 
     @Override
     protected void initView() {
+        loadingDailog = builder.create();
+        loadingDailog.show();
+        imgFan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         goodslist = new ArrayList<>();
 
         recyHong.setLayoutManager(new LinearLayoutManager(this));
         hongAdapter = new HongAdapter(goodslist, this);
         recyHong.setAdapter(hongAdapter);
 
+
+        address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ShopActivity.this, AddressActivity.class);
+                startActivityForResult(intent, 100);
+            }
+        });
+        loadingDailog.dismiss();
     }
 
     @Override
@@ -140,8 +178,12 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
     @Override
     protected void initData() {
         id = getIntent().getStringExtra("id");
-        presenter.getshop(id);
-        presenter.gethong(id);
+        if (id != null) {
+
+            presenter.getshop(id);
+            presenter.gethong(id);
+
+        }
     }
 
     @Override
@@ -166,13 +208,18 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
 
     @Override
     public void getshop(ShopBean shopBean) {
-        initGood(shopBean.getData());
+        if (shopBean.getData() != null) {
+            initGood(shopBean.getData());
+        }
     }
 
     @Override
     public void gethong(HongBean hongBean) {
-        initHong(hongBean.getGoods_info());
-        initBanner(hongBean.getGoods_info().getGoods_imgs());
+        if (hongBean.getGoods_info().getGoods_imgs() != null && hongBean.getGoods_info() != null) {
+            initHong(hongBean.getGoods_info());
+            initBanner(hongBean.getGoods_info().getGoods_imgs());
+
+        }
     }
 
     @Override
@@ -181,18 +228,23 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
     }
 
     private void initBanner(List<HongBean.GoodsInfoBean.GoodsImgsBean> list) {
-        banner.setImages(list).setImageLoader(new ImageLoader() {
-            @Override
-            public void displayImage(Context context, Object path, ImageView imageView) {
-                HongBean.GoodsInfoBean.GoodsImgsBean bean = (HongBean.GoodsInfoBean.GoodsImgsBean) path;
-                Glide.with(context).load(bean.getGoods_img()).into(imageView);
-            }
-        }).start();
+        if (list != null && list.size() > 0) {
+
+            banner.setImages(list).setImageLoader(new ImageLoader() {
+                @Override
+                public void displayImage(Context context, Object path, ImageView imageView) {
+                    HongBean.GoodsInfoBean.GoodsImgsBean bean = (HongBean.GoodsInfoBean.GoodsImgsBean) path;
+                    Glide.with(context).load(bean.getGoods_img()).into(imageView);
+                }
+            }).start();
+
+        }
     }
 
     private void initHong(HongBean.GoodsInfoBean list) {
         goodslist.add(list);
         hongAdapter.notifyDataSetChanged();
+
     }
 
     private void initGood(String webData) {
@@ -259,7 +311,7 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.btn_shop)
+    @OnClick({R.id.btn_shop})
     public void onViewClicked() {
         setPop();
     }
@@ -267,7 +319,12 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
     public void setPop() {
 
         View root = LayoutInflater.from(this).inflate(R.layout.shop_pop, null);
-        final PopupWindow popupWindow = new PopupWindow(root, LinearLayout.LayoutParams.MATCH_PARENT, 1500);
+        final PopupWindow popupWindow = new PopupWindow(root);
+        popupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        int height = getWindowManager().getDefaultDisplay().getHeight();
+        popupWindow.setHeight(height * 3 / 5);
+
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setOutsideTouchable(true);
         popupWindow.setOutsideTouchable(true);
@@ -299,8 +356,12 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
                     intent.putExtra("price", goodslist.get(0).getMarket_price_format());
                     intent.putExtra("old", goodslist.get(0).getMin_price_format());
                     intent.putExtra("img", goodslist.get(0).getImg());
+                    if (address1 != null) {
+                        intent.putExtra("dizhi", address1);
+                    }
                     startActivity(intent);
                     popupWindow.dismiss();
+                    numberBuy = 0;
                 }
 
             }
@@ -344,5 +405,42 @@ public class ShopActivity extends BaseActivity<ShopPersenter> implements IShop.V
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == 200) {
+            address1 = data.getStringExtra("address");
+            textAddress.setText(address1);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
+
+    @OnClick({R.id.fan_shou, R.id.add_car, R.id.fenxiang})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.fan_shou:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("fan", "10");
+                startActivity(intent);
+                break;
+            case R.id.add_car:
+                startActivity(new Intent(ShopActivity.this, CarActivity.class));
+                break;
+            case R.id.fenxiang:
+                break;
+        }
     }
 }

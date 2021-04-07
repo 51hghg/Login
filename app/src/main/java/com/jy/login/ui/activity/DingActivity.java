@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
@@ -56,6 +58,17 @@ public class DingActivity extends BaseActivity {
     Button btnTrue;
     @BindView(R.id.con_Main)
     ConstraintLayout conMain;
+    @BindView(R.id.address)
+    LinearLayout address;
+    @BindView(R.id.img_jia)
+    ImageView imgJia;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
+    @BindView(R.id.img_right)
+    ImageView imgRight;
+    @BindView(R.id.img_fanhui)
+    ImageView imgFanhui;
+
 
     @Override
     protected int getLayout() {
@@ -89,36 +102,68 @@ public class DingActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        imgFanhui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         Intent intent = getIntent();
         String imgbig = intent.getStringExtra("img");
         String namebig = intent.getStringExtra("name");
         String pricebig = intent.getStringExtra("price");
         String old = intent.getStringExtra("old");
         int sizebig = intent.getIntExtra("size", 0);
-
+        String dizhi = intent.getStringExtra("dizhi");
+        if(dizhi!=null){
+            tvAddress.setText(dizhi);
+            imgJia.setVisibility(View.GONE);
+            imgRight.setVisibility(View.GONE);
+            tvAddress.setTextSize(20);
+            this.address.setClickable(false);
+        }
         Glide.with(this).load(imgbig).into(img);
         name.setText(namebig);
-        price.setText(pricebig);
-        priceOk.setText(pricebig);
-        priceOok.setText(pricebig);
-        oldPrice.setText(old);
+        price.setText(old);
+
+        oldPrice.setText(pricebig);
         oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-//        size1.setText(sizebig);
-//        size2.setText(sizebig);
-//        size.setText(sizebig);
+        size1.setText("x " + sizebig);
+        size2.setText("共" + sizebig + "件 小计：");
+        size.setText("共" + sizebig + "件 小计：");
+        String[] str = old.split("￥");
+        for (int i = 0; i < str.length; i++) {
+            Log.d("TAG", "initView: " + str[i]);
+        }
+        String[] split = str[1].split(".");
 
-
+        float a = Float.parseFloat(str[1]);
+        Log.d("TAG", "initView: " + a);
+        priceOk.setText(a * sizebig + "");
+        priceOok.setText(a * sizebig + "");
         btnTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setPop();
             }
         });
+
+        this.address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(DingActivity.this, AddressActivity.class), 1);
+            }
+        });
     }
 
     public void setPop() {
         View root = LayoutInflater.from(this).inflate(R.layout.ding_pop, null);
-        final PopupWindow popupWindow = new PopupWindow(root, LinearLayout.LayoutParams.MATCH_PARENT, 900);
+        final PopupWindow popupWindow = new PopupWindow(root);
+
+        popupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        int height = getWindowManager().getDefaultDisplay().getHeight();
+        popupWindow.setHeight(height * 2 / 5);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         final TextView text_Cancel = root.findViewById(R.id.text_cancel);
         popupWindow.setOutsideTouchable(true);
@@ -165,6 +210,19 @@ public class DingActivity extends BaseActivity {
     @Override
     protected void initData() {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == 200) {
+            String address = data.getStringExtra("address");
+            tvAddress.setText(address);
+            imgJia.setVisibility(View.GONE);
+            imgRight.setVisibility(View.GONE);
+            tvAddress.setTextSize(20);
+            this.address.setClickable(false);
+        }
     }
 
     @Override

@@ -9,11 +9,23 @@
 
     <!--设置Tablayout字体大小-->
     <style name="TabLayoutTextSize">
-        <item name="android:textSize">@dimen/sp_15</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+<!--        <item name="android:textStyle">bold</item>-->
     </style>
     <!--设置Tablayout字体加粗-->
     <style name="TabLayoutTextStyle">
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="MyDialogStyle">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
 </resources>

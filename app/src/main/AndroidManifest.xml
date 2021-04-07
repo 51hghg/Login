@@ -15,25 +15,34 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
+        android:name=".app.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/img_main"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.DingActivity"></activity>
-        <activity android:name=".ui.activity.TimeActivity">
+        <activity android:name=".ui.activity.MedingdanActivity"></activity>
+        <activity android:name=".ui.activity.CarActivity" />
+        <activity android:name=".ui.activity.YijianActivity" />
+        <activity android:name=".ui.activity.StartActivity" />
+        <activity android:name=".ui.activity.VipActivity" />
+        <activity android:name=".ui.activity.ShezhiActivity" />
+        <activity android:name=".ui.activity.ViewpagerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.AddressActivity" />
+        <activity android:name=".ui.activity.DingActivity" />
+        <activity android:name=".ui.activity.TimeActivity" />
         <activity android:name=".ui.activity.ShopActivity" />
         <activity android:name=".ui.activity.BigActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".loginActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"

@@ -56,6 +56,19 @@ public  abstract class BaseAdapter<D> extends RecyclerView.Adapter {
     }
     IListClick iListClick;
 
+
+    public interface IItemViewClick<D>{
+        //条目中的元素点击
+        void itemViewClick(int viewid, D data);
+    }
+
+
+    protected IItemViewClick iItemViewClick;
+
+    public void addItemViewClick(IItemViewClick click){
+        this.iItemViewClick = click;
+    }
+
     public void setiListClick(IListClick iListClick) {
         this.iListClick = iListClick;
     }

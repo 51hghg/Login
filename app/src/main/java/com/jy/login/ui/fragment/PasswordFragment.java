@@ -1,87 +1,101 @@
 package com.jy.login.ui.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import com.jy.login.DBOpenHelper;
 import com.jy.login.MainActivity;
 import com.jy.login.R;
-import com.jy.login.RegisterActivity;
-import com.jy.login.User;
+import com.jy.login.base.BaseFragment;
+import com.jy.login.interfaces.login.ILogin;
+import com.jy.login.model.bean.LoginBean;
+import com.jy.login.model.bean.MeBean;
+import com.jy.login.persenter.LoginPersenter;
+import com.jy.login.utils.LoadingDailog;
+import com.jy.login.utils.SpUtils;
+import com.jy.login.utils.TxtUtils;
 
-import java.util.ArrayList;
+import butterknife.BindView;
+import butterknife.OnClick;
 
-public class PasswordFragment extends Fragment implements View.OnClickListener {
-    private EditText mLoginactivityUsernameEt;
-    private EditText mLoginactivityPasswordEt;
-    private Button mLoginactivityLoginBt;
-    private TextView mLoginactivityRegisterTv;
-    private DBOpenHelper mDBOpenHelper;
+public class PasswordFragment extends BaseFragment<LoginPersenter> implements ILogin.View {
+
+
+    @BindView(R.id.et_username)
+    EditText etUsername;
+    @BindView(R.id.et_password)
+    EditText etPassword;
+    @BindView(R.id.bt_login)
+    Button btLogin;
+    @BindView(R.id.tv_forget)
+    TextView tvForget;
+    @BindView(R.id.tv_register)
+    TextView tvRegister;
+    @BindView(R.id.tv_loginactivity_else)
+    TextView tvLoginactivityElse;
+    private String name;
+    private String password;
+    private LoadingDailog.Builder loadBuilder;
+    private LoadingDailog loadingDailog;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View inflate = inflater.inflate(R.layout.fragment_password, container, false);
-        initView(inflate);
-        return inflate;
-    }
-
-    private void initView(@NonNull final View itemView) {
-        mLoginactivityUsernameEt = (EditText) itemView.findViewById(R.id.et_loginactivity_username);
-        mLoginactivityPasswordEt = (EditText) itemView.findViewById(R.id.et_loginactivity_password);
-        mLoginactivityLoginBt = (Button) itemView.findViewById(R.id.bt_loginactivity_login);
-        mLoginactivityLoginBt.setOnClickListener(this);
-        mLoginactivityRegisterTv = (TextView) itemView.findViewById(R.id.tv_loginactivity_register);
-        mLoginactivityRegisterTv.setOnClickListener(this);
-        mDBOpenHelper = new DBOpenHelper(getActivity());
+    public int getLatout() {
+        return R.layout.fragment_password;
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_loginactivity_login:
-                String name = mLoginactivityUsernameEt.getText().toString().trim();
-                String password = mLoginactivityPasswordEt.getText().toString().trim();
-                if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password)) {
-                    ArrayList<User> data = mDBOpenHelper.getAllData();
-                    boolean match = false;
-                    for (int i = 0; i < data.size(); i++) {
-                        User user = data.get(i);
-                        if (name.equals(user.getName()) && password.equals(user.getPassword())) {
-                            match = true;
-                            break;
-                        } else {
-                            match = false;
-                        }
-                    }
-                    if (match) {
-                        Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getActivity(), "用户名或密码不正确，请重新输入", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "请输入你的用户名或密码", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.tv_loginactivity_register:
-                startActivity(new Intent(getActivity(), RegisterActivity.class));
-                break;
-            default:
-                break;
+    public void initView() {
+        loadBuilder = new LoadingDailog.Builder(getActivity())
+                .setMessage("加载中...")
+                .setCancelable(true)
+                .setCancelOutside(true);
+    }
+
+    @Override
+    public LoginPersenter createPresenter() {
+        return new LoginPersenter(this);
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @OnClick(R.id.bt_login)
+    public void onViewClicked() {
+        loadingDailog = loadBuilder.create();
+        loadingDailog.show();
+        name = etUsername.getText().toString();
+        password = etPassword.getText().toString();
+        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password)) {
+            presenter.getlogin(name, password);
+        } else {
+            Toast.makeText(getActivity(), "请输入你的用户名或密码", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void getlogin(LoginBean loginBean) {
+        if (loginBean.getMsg().equals("请求成功！")) {
+            loadingDailog.dismiss();
+            SpUtils.getInstance().setValue("Token", loginBean.getData().getKey());
+            Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
+            Log.d("TAG", "initView: " + SpUtils.getInstance().getString("Token"));
+            startActivity(new Intent(getActivity(), MainActivity.class));
+            loadingDailog.dismiss();
+        }else{
+            Toast.makeText(getActivity(), "账号或密码错误", Toast.LENGTH_SHORT).show();
+            loadingDailog.dismiss();
+        }
+    }
+
+    @Override
+    public void getme(MeBean meBean) {
+
     }
 }

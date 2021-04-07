@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.jy.login.MainActivity;
 import com.jy.login.R;
+import com.jy.login.loginActivity;
+import com.jy.login.utils.SpUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,7 +33,8 @@ public class TimeActivity extends AppCompatActivity {
     protected boolean useThemestatusBarColor = false;
     //是否使用状态栏文字和图标为暗色，如果状态栏采用了白色系，则需要使状态栏和图标为暗色，android6.0以上可以设置
     protected boolean useStatusBarColor = true;
-    private int i=3;
+    private int i = 3;
+
     protected void setStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
             View decorView = getWindow().getDecorView();
@@ -55,6 +58,7 @@ public class TimeActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +67,7 @@ public class TimeActivity extends AppCompatActivity {
         setStatusBar();
         timer = new Timer();
 
-        time.setText(i+" 跳过");
+        time.setText(i + " 跳过");
 
         timer.schedule(new TimerTask() {
             @Override
@@ -72,22 +76,26 @@ public class TimeActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         i--;
-                        if (i==0){
-                            startActivity(new Intent(TimeActivity.this,MainActivity.class));
+                        if (i == 0) {
+                            startActivity(new Intent(TimeActivity.this, MainActivity.class));
                             timer.cancel();
                             finish();
-                        }else{
-                            time.setText(i+" 跳过");
+                        } else {
+                            time.setText(i + " 跳过");
                         }
                     }
                 });
             }
-        },1000,1000);
+        }, 1000, 1000);
 
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(TimeActivity.this,MainActivity.class));
+                if (SpUtils.getInstance().getString("Token").isEmpty()) {
+                    startActivity(new Intent(TimeActivity.this, loginActivity.class));
+                } else {
+                    startActivity(new Intent(TimeActivity.this, MainActivity.class));
+                }
                 timer.cancel();
                 finish();
             }

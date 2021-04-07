@@ -8,6 +8,7 @@ import com.jy.login.model.AddressModel;
 import com.jy.login.model.ShopModel;
 import com.jy.login.model.bean.AddressBean;
 import com.jy.login.model.bean.BannerBean;
+import com.jy.login.model.bean.ViewPagerBean;
 
 public class AddressPersenter extends BasePresenter<IAddress.View> implements IAddress.Persenter {
 
@@ -20,7 +21,7 @@ public class AddressPersenter extends BasePresenter<IAddress.View> implements IA
     }
 
     @Override
-    public void getaddress() {
+    public void getaddress(String token) {
         model.getaddress(new CallBack() {
             @Override
             public void onFaile(String msg) {
@@ -35,6 +36,25 @@ public class AddressPersenter extends BasePresenter<IAddress.View> implements IA
                     view.getaddress((AddressBean) o);
                 }
             }
-        });
+        },token);
+    }
+
+    @Override
+    public void getviewpager(String pid) {
+        model.getviewpager(new CallBack() {
+            @Override
+            public void onFaile(String msg) {
+                if (view != null) {
+                    view.tips(msg);
+                }
+            }
+
+            @Override
+            public void onSuccess(Object o) {
+                if (view != null) {
+                    view.getviewpager((ViewPagerBean) o);
+                }
+            }
+        },pid);
     }
 }

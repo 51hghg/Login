@@ -3,14 +3,19 @@ package com.jy.login.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Outline;
+import android.graphics.Typeface;
 import android.os.Build;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -33,6 +38,7 @@ import com.jy.login.model.bean.TabDetailBean;
 import com.jy.login.persenter.ShopPersenter;
 import com.jy.login.ui.activity.ShopActivity;
 import com.jy.login.ui.adapter.GoodsAdapter;
+import com.jy.login.utils.LoadingDailog;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
 
@@ -45,17 +51,18 @@ public class ShopFragment extends BaseFragment<ShopPersenter> implements IShop.V
 
     @BindView(R.id.banner)
     Banner banner;
-    @BindView(R.id.bt_main_logout)
-    Button btMainLogout;
     @BindView(R.id.tablayout)
     TabLayout tablayout;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
     @BindView(R.id.recygoods)
     RecyclerView recygoods;
-//    private ArrayList<GoodsBean.DataBean.YRinitlistBean._$10Bean.ContentBean.GoodslistBean> goodslist;
+
+    private LoadingDailog loadingDailog;
+    //    private ArrayList<GoodsBean.DataBean.YRinitlistBean._$10Bean.ContentBean.GoodslistBean> goodslist;
     private GoodsAdapter goodsAdapter;
     private ArrayList<GoodBean.DataBean.GoodsListBean> goodlist;
+    private LoadingDailog.Builder builder;
 
     @Override
     public int getLatout() {
@@ -64,7 +71,10 @@ public class ShopFragment extends BaseFragment<ShopPersenter> implements IShop.V
 
     @Override
     public void initView() {
-
+        builder= new LoadingDailog.Builder(getActivity())
+                .setMessage("加载中...")
+                .setCancelable(true)
+                .setCancelOutside(true);
 //        goodslist = new ArrayList<>();
         goodlist = new ArrayList<>();
 
@@ -73,22 +83,20 @@ public class ShopFragment extends BaseFragment<ShopPersenter> implements IShop.V
         recygoods.setAdapter(goodsAdapter);
 
         goodsAdapter.setOnItemClickListener(new GoodsAdapter.OnItemClickListener() {
+
+
             @Override
             public void onClick(int pos) {
+                loadingDailog = builder.create();
+                loadingDailog.show();
                 Intent intent = new Intent(getActivity(), ShopActivity.class);
                 intent.putExtra("id", goodlist.get(pos).getId());
                 getActivity().startActivity(intent);
+                loadingDailog.dismiss();
             }
         });
 
-        btMainLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), loginActivity.class);
-                startActivity(intent);
-                getActivity().finish();
-            }
-        });
+
     }
 
     @Override
@@ -157,6 +165,35 @@ public class ShopFragment extends BaseFragment<ShopPersenter> implements IShop.V
         for (int i = 0; i < list.size(); i++) {
             tablayout.getTabAt(i).setText(list.get(i).getName());
         }
+
+        final TextView inflate = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.main_top_item, null);
+        inflate.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+        inflate.setTextSize(20);
+        inflate.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));//加粗
+        inflate.setText(tablayout.getTabAt(0).getText());
+        tablayout.getTabAt(0).setCustomView(inflate).select();
+        tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                final TextView inflate = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.main_top_item, null);
+                inflate.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+                inflate.setTextSize(20);
+                inflate.setText(tab.getText());
+                inflate.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));//加粗
+                tab.setCustomView(inflate);
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                tab.setCustomView(null);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override

@@ -12,7 +12,7 @@ public class ImageLoader {
     public static void loadImage(String url, ImageView img){
         //用key为image的值的时候来判断当前时无图还有有图模式
         if(SpUtils.getInstance().getBoolean("image") && img != null){
-            Glide.with(MyApp.context).load(url).into(img);
+            Glide.with(MyApp.app).load(url).into(img);
         }
     }
 

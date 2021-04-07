@@ -4,9 +4,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
+        android:layout_width="@dimen/dp_55"
+        android:layout_height="@dimen/dp_55"
         android:id="@+id/img_goodschilde"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:scaleType="centerCrop"
         android:layout_marginTop="@dimen/dp_10"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,6 +22,6 @@
         android:textSize="@dimen/sp_13"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:textColor="#000000"
+        android:textColor="#333333"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

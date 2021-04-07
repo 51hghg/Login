@@ -24,6 +24,7 @@ public class ShopPersenter extends BasePresenter<IShop.View> implements IShop.Pe
 
     @Override
     public void getbanner() {
+
         model.getbanner(new CallBack() {
             @Override
             public void onFaile(String msg) {

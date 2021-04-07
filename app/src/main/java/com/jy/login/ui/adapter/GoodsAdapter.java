@@ -40,7 +40,7 @@ public class GoodsAdapter extends BaseAdapter {
         tvTitle.setText(bean.getName());
         tvMoney.setText(bean.getSprice());
         tvGood.setText(bean.getCommnet_count()+"万+评论");
-        tvGood.setText("%"+bean.getGood_score()+"好评");
+        tvGood.setText(bean.getGood_score()+"%"+"好评");
 
         vh.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -50,8 +50,6 @@ public class VideoFragment extends BaseFragment<ShopPersenter> implements IShop.
 
     @BindView(R.id.banner)
     Banner banner;
-    @BindView(R.id.bt_main_logout)
-    Button btMainLogout;
     @BindView(R.id.tablayout)
     TabLayout tablayout;
     @BindView(R.id.viewpager)
@@ -75,57 +73,48 @@ public class VideoFragment extends BaseFragment<ShopPersenter> implements IShop.
         goodsAdapter = new GoodsAdapter(goodslist, getActivity());
         recygoods.setAdapter(goodsAdapter);
 
-        btMainLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), loginActivity.class);
-                startActivity(intent);
-                getActivity().finish();
-            }
-        });
-
-        View root = LayoutInflater.from(getActivity()).inflate(R.layout.item_pop, null);
-        final PopupWindow popupWindow = new PopupWindow(root, 600, 300);
-        popupWindow.setBackgroundDrawable(new ColorDrawable());
-        Button btn_ok = root.findViewById(R.id.btn_ok);
-        Button btn_no = root.findViewById(R.id.btn_no);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-            }
-        });
-        btn_no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-            }
-        });
-
-        // 产生背景变暗效果
-        WindowManager.LayoutParams lp = getActivity().getWindow()
-                .getAttributes();
-        lp.alpha = 0.4f;
-        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        getActivity().getWindow().setAttributes(lp);
-        popupWindow.setTouchable(true);
-        popupWindow.setFocusable(true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.update();
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-
-            // 在dismiss中恢复透明度
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = getActivity().getWindow()
-                        .getAttributes();
-                lp.alpha = 1f;
-                getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                getActivity().getWindow().setAttributes(lp);
-            }
-        });
-
-        popupWindow.showAtLocation(banner, Gravity.CENTER, 0, 0);
+//        View root = LayoutInflater.from(getActivity()).inflate(R.layout.item_pop, null);
+//        final PopupWindow popupWindow = new PopupWindow(root, 600, 300);
+//        popupWindow.setBackgroundDrawable(new ColorDrawable());
+//        Button btn_ok = root.findViewById(R.id.btn_ok);
+//        Button btn_no = root.findViewById(R.id.btn_no);
+//        btn_ok.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                popupWindow.dismiss();
+//            }
+//        });
+//        btn_no.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                popupWindow.dismiss();
+//            }
+//        });
+//
+//        // 产生背景变暗效果
+//        WindowManager.LayoutParams lp = getActivity().getWindow()
+//                .getAttributes();
+//        lp.alpha = 0.4f;
+//        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//        getActivity().getWindow().setAttributes(lp);
+//        popupWindow.setTouchable(true);
+//        popupWindow.setFocusable(true);
+//        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+//        popupWindow.setOutsideTouchable(true);
+//        popupWindow.update();
+//        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//
+//            // 在dismiss中恢复透明度
+//            public void onDismiss() {
+//                WindowManager.LayoutParams lp = getActivity().getWindow()
+//                        .getAttributes();
+//                lp.alpha = 1f;
+//                getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//                getActivity().getWindow().setAttributes(lp);
+//            }
+//        });
+//
+//        popupWindow.showAtLocation(banner, Gravity.CENTER, 0, 0);
     }
 
     @Override

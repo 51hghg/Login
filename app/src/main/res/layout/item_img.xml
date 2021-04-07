@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/img"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_250"
+        android:layout_height="446dp"
         android:layout_marginLeft="@dimen/dp_5"
         android:layout_marginRight="@dimen/dp_5"
         android:descendantFocusability="blocksDescendants"

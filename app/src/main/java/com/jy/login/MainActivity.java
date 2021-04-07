@@ -1,14 +1,23 @@
 package com.jy.login;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -16,9 +25,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jy.login.ui.fragment.GoFragment;
+import com.jy.login.ui.fragment.LiveFragment;
 import com.jy.login.ui.fragment.MeFragment;
 import com.jy.login.ui.fragment.ShopFragment;
 import com.jy.login.ui.fragment.VideoFragment;
+import com.jy.login.utils.SpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setStatusBar();
+
         initView();
     }
 
@@ -45,13 +57,18 @@ public class MainActivity extends AppCompatActivity {
         // 绑定点击监听器
 //        mBtMainLogout.setOnClickListener(this);
 
+//        if(SpUtils.getInstance()!=null&&SpUtils.getInstance().getString("Token")==null){
+//            startActivity(new Intent(this,loginActivity.class));
+//        }
+        String fan = getIntent().getStringExtra("fan");
+
         mViewpager = (ViewPager) findViewById(R.id.viewpager);
         mTablayout = (TabLayout) findViewById(R.id.tablayout);
 
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new ShopFragment());
         fragments.add(new GoFragment());
-        fragments.add(new VideoFragment());
+        fragments.add(new LiveFragment());
         fragments.add(new MeFragment());
 
         mViewpager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -75,6 +92,72 @@ public class MainActivity extends AppCompatActivity {
         mTablayout.getTabAt(1).setText("同城配送").setIcon(R.drawable.selecter1);
         mTablayout.getTabAt(2).setText("教你做").setIcon(R.drawable.selecter2);
         mTablayout.getTabAt(3).setText("我的").setIcon(R.drawable.selecter3);
+        if(fan!=null&&fan.equals("10")){
+            mTablayout.getTabAt(0).isSelected();
+        }
+//        mViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                if(position==1||position==2){
+//                    setPop();
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
+    }
+    public void setPop(){
+        View root = LayoutInflater.from(this).inflate(R.layout.item_pop, null);
+        final PopupWindow popupWindow = new PopupWindow(root, 600, 300);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setOutsideTouchable(true);
+        Button btn_ok = root.findViewById(R.id.btn_ok);
+        Button btn_no = root.findViewById(R.id.btn_no);
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+        btn_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        // 产生背景变暗效果
+        WindowManager.LayoutParams lp = getWindow()
+                .getAttributes();
+        lp.alpha = 0.4f;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(lp);
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.update();
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+            // 在dismiss中恢复透明度
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getWindow()
+                        .getAttributes();
+                lp.alpha = 1f;
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(lp);
+            }
+        });
+
+        popupWindow.showAtLocation(mViewpager, Gravity.CENTER, 0, 0);
     }
 
 //    public void onClick(View view) {
@@ -129,4 +212,6 @@ protected void setStatusBar() {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 }
+
+
 }
